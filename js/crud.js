@@ -74,7 +74,23 @@ const deleteLivros = async function() {
 
 //Retornar todos os livros
 const getAllLivros = async function() {
+    let URL = 'https://projeto-livraria-latx.onrender.com/v2/livraria/livro/'
 
+    let response = await fetch(URL)
+
+    let dados = await response.json()
+
+    //Recebe o elemento principal para colocar a lista de dados
+    let divListDados = document.getElementById('listDados')
+
+    //Criar elementos no HTML
+    let divDados = document.createElement('div')
+
+    //Adicionar atributos
+    divDados.setAttribute('class', 'linha dados')
+
+    //Associar elementos pai e seus filhos
+    divListDados.appendChild(divDados)
 }
 
 //Buscar um livro pelo ID
