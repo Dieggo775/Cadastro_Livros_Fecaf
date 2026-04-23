@@ -4,6 +4,7 @@
 *Autor: Diego Araujo
 *Versao: 1.0
 API: https://app-livraria-2024-gsc9e3gcdsh2f2b5.brazilsouth-01.azurewebsites.net/v2/livraria/livro'
+https://projeto-livraria-latx.onrender.com/v2/livraria/livro/
 */
 
 const botaoSalvar = document.getElementById('salvar')
@@ -11,7 +12,7 @@ const botaoSalvar = document.getElementById('salvar')
 //Inserir um novo livro
 const postLivro = async function() {
 
-    let URL = 'https://app-livraria-2024-gsc9e3gcdsh2f2b5.brazilsouth-01.azurewebsites.net/v2/livraria/livro'
+    let URL = 'https://projeto-livraria-latx.onrender.com/v2/livraria/livro/'
 
     let dadosJSON = {}
 
