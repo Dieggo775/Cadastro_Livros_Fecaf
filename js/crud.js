@@ -70,8 +70,25 @@ const putLivro = async function() {
 }
 
 //Excluir um Livro existente
-const deleteLivros = async function() {
+const deleteLivros = async function(id) {
+    let URL = 'https://projeto-livraria-latx.onrender.com/v2/livraria/livro/' + id
 
+    try {
+        let response = await fetch(URL, {
+            method: 'DELETE',
+            mode: 'cors'
+        })
+
+        if(response.status == 200) {
+            alert('Livro excluído com sucesso!')
+            getAllLivros()
+        } else {
+            alert('Não foi possível excluir o livro, tente novamente! Status: ' + response.status)
+        }
+    } catch (error) {
+        console.error('Erro ao excluir o livro:', error)
+        alert('Erro de rede ou CORS. Verifique o console para detalhes.')
+    }
 }
 
 //Retornar todos os livros
@@ -89,19 +106,20 @@ const getAllLivros = async function() {
 
     dados.books.forEach(function(itemLivro){
 
-        let nomeLivro = itemLivro.title
-        let descLivro = itemLivro.subtitle
-        let valorLivro = itemLivro.price
+        let nomeLivro   = itemLivro.title
+        let descLivro   = itemLivro.subtitle
+        let valorLivro  = itemLivro.price
+        let idLivro     = itemLivro.id
 
         //Criar elementos no HTML
         let divDados    = document.createElement('div')
         let divTitle    = document.createElement('div')
         let divSubTitle = document.createElement('div')
         let divPrice    = document.createElement('div')
-        let divOpcoes  = document.createElement('div')
+        let divOpcoes   = document.createElement('div')
         let spanEditar  = document.createElement('span')
-        let spanExcluir  = document.createElement('span')
-        let imgEditar  = document.createElement('img')
+        let spanExcluir = document.createElement('span')
+        let imgEditar   = document.createElement('img')
         let imgExcluir  = document.createElement('img')
         
 
@@ -109,6 +127,7 @@ const getAllLivros = async function() {
         divDados.setAttribute('class', 'linha dados')
         imgEditar.setAttribute('src', 'icones/editar.png')
         imgExcluir.setAttribute('src', 'icones/excluir.png')
+        imgExcluir.setAttribute('idLivro', idLivro)
 
         //Textos
         divTitle.innerText      = nomeLivro
@@ -126,6 +145,10 @@ const getAllLivros = async function() {
         spanEditar.appendChild(imgEditar)
         spanExcluir.appendChild(imgExcluir)
 
+        //Adicionar evento de clique para excluir o livro
+        imgExcluir.addEventListener('click', function() {
+            deleteLivros(imgExcluir.getAttribute('idLivro'))
+        })
     })
 }
 
