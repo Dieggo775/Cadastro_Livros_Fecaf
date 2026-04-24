@@ -53,6 +53,7 @@ const postLivro = async function() {
 
         if(response.status == 201) {
             alert('Livro cadastrado com sucesso!')
+            resetForm()
             getAllLivros()
         }else{
             alert('Não foi possível cadastrar o livro, tente novamente! Status: ' + response.status)
@@ -131,6 +132,13 @@ const getAllLivros = async function() {
 //Buscar um livro pelo ID
 const getByIdLivro = async function() {
 
+}
+
+const resetForm = function() {
+    document.getElementById('title').value = ''
+    document.getElementById('subtitle').value = ''
+    document.getElementById('image').value = ''
+    document.getElementById('price').value = ''
 }
 
 botaoSalvar.addEventListener('click', function() {
