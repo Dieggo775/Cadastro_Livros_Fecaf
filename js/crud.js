@@ -53,6 +53,7 @@ const postLivro = async function() {
 
         if(response.status == 201) {
             alert('Livro cadastrado com sucesso!')
+            getAllLivros()
         }else{
             alert('Não foi possível cadastrar o livro, tente novamente! Status: ' + response.status)
         }
@@ -83,14 +84,48 @@ const getAllLivros = async function() {
     //Recebe o elemento principal para colocar a lista de dados
     let divListDados = document.getElementById('listDados')
 
-    //Criar elementos no HTML
-    let divDados = document.createElement('div')
+    divListDados.innerText = '' //Limpar os dados para evitar duplicidade
 
-    //Adicionar atributos
-    divDados.setAttribute('class', 'linha dados')
+    dados.books.forEach(function(itemLivro){
 
-    //Associar elementos pai e seus filhos
-    divListDados.appendChild(divDados)
+        let nomeLivro = itemLivro.title
+        let descLivro = itemLivro.subtitle
+        let valorLivro = itemLivro.price
+
+        //Criar elementos no HTML
+        let divDados    = document.createElement('div')
+        let divTitle    = document.createElement('div')
+        let divSubTitle = document.createElement('div')
+        let divPrice    = document.createElement('div')
+        let divOpcoes  = document.createElement('div')
+        let spanEditar  = document.createElement('span')
+        let spanExcluir  = document.createElement('span')
+        let imgEditar  = document.createElement('img')
+        let imgExcluir  = document.createElement('img')
+        
+
+        //Adicionar atributos
+        divDados.setAttribute('class', 'linha dados')
+        imgEditar.setAttribute('src', 'icones/editar.png')
+        imgExcluir.setAttribute('src', 'icones/excluir.png')
+
+        //Textos
+        divTitle.innerText      = nomeLivro
+        divSubTitle.innerText   = descLivro
+        divPrice.innerText      = valorLivro
+
+        //Associar elementos pai e seus filhos
+        divListDados.appendChild(divDados)
+        divDados.appendChild(divTitle)
+        divDados.appendChild(divSubTitle)
+        divDados.appendChild(divPrice)
+        divDados.appendChild(divOpcoes)
+        divOpcoes.appendChild(spanEditar)
+        divOpcoes.appendChild(spanExcluir)
+        spanEditar.appendChild(imgEditar)
+        spanExcluir.appendChild(imgExcluir)
+
+    })
 }
 
 //Buscar um livro pelo ID
@@ -100,4 +135,8 @@ const getByIdLivro = async function() {
 
 botaoSalvar.addEventListener('click', function() {
     postLivro()
+})
+
+window.addEventListener('load', function() {
+    getAllLivros()
 })
