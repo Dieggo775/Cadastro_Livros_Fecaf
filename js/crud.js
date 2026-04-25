@@ -77,7 +77,7 @@ const deleteLivros = async function(id) {
         let response = await fetch(URL, {
             method: 'DELETE',
             mode: 'cors'
-        })
+        }) 
 
         if(response.status == 200) {
             alert('Livro excluído com sucesso!')
@@ -126,6 +126,7 @@ const getAllLivros = async function() {
         //Adicionar atributos
         divDados.setAttribute('class', 'linha dados')
         imgEditar.setAttribute('src', 'icones/editar.png')
+        imgEditar.setAttribute('idLivro', idLivro)
         imgExcluir.setAttribute('src', 'icones/excluir.png')
         imgExcluir.setAttribute('idLivro', idLivro)
 
@@ -149,12 +150,26 @@ const getAllLivros = async function() {
         imgExcluir.addEventListener('click', function() {
             deleteLivros(imgExcluir.getAttribute('idLivro'))
         })
+
+        //Adicionar evento de clique para editar o livro
+        imgEditar.addEventListener('click', function() {
+            getByIdLivro(imgEditar.getAttribute('idLivro'))
+        })
     })
 }
 
 //Buscar um livro pelo ID
-const getByIdLivro = async function() {
+const getByIdLivro = async function(id) {
+    let URL = 'https://projeto-livraria-latx.onrender.com/v2/livraria/livro/' + id
 
+        let response = await fetch(URL)
+
+            let dados = await response.json()
+            
+            document.getElementById('title').value      = dados.books[0].title
+            document.getElementById('subtitle').value   = dados.books[0].subtitle
+            document.getElementById('image').value      = dados.books[0].image
+            document.getElementById('price').value      = dados.books[0].price
 }
 
 const resetForm = function() {
