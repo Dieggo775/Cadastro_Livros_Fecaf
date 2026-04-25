@@ -40,8 +40,6 @@ const postLivro = async function() {
     dadosJSON.image     = fotoLivro.value
     dadosJSON.price     = valorLivro.value
 
-    console.log(dadosJSON)
-
     //POST dos dados para API de livros
     try {
         let response = await fetch(URL, {
@@ -67,10 +65,50 @@ const postLivro = async function() {
 //Atualiza um livro existente
 const putLivro = async function() {
 
+    let id = sessionStorage.getItem('idLivro')
+
+    let URL = 'https://projeto-livraria-latx.onrender.com/v2/livraria/livro/'+id
+
+    let dadosJSON = {}
+
+    //Receber os dados do formulario
+    let nomeLivro = document.getElementById('title')
+    let desLivro = document.getElementById('subtitle')
+    let fotoLivro = document.getElementById('image')
+    let valorLivro = document.getElementById('price')
+
+    //Criar o JSON de dados {title: 'nome do livro', subtitle: 'descricao do livro', image: 'url da imagem do livro', price: 'valor do livro'}
+    dadosJSON.title     = nomeLivro.value
+    dadosJSON.subtitle  = desLivro.value
+    dadosJSON.image     = fotoLivro.value
+    dadosJSON.price     = valorLivro.value
+
+    //POST dos dados para API de livros
+    try {
+        let response = await fetch(URL, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(dadosJSON)
+        })
+
+        if(response.status == 200) {
+            alert('Livro atualizado com sucesso!')
+            resetForm()
+            document.getElementById('salvar').innerText = 'Salvar'
+            getAllLivros()
+        }else{
+            alert('Não foi possível atualizar o livro, tente novamente! Status: ' + response.status)
+        }
+    } catch (error) {
+        console.error('Erro ao enviar dados:', error)
+        alert('Erro de rede ou CORS. Verifique o console para detalhes.')
+    }
+
 }
 
 //Excluir um Livro existente
-const deleteLivros = async function(id) {
+const deleteLivros = async function(d) {
     let URL = 'https://projeto-livraria-latx.onrender.com/v2/livraria/livro/' + id
 
     try {
@@ -160,6 +198,10 @@ const getAllLivros = async function() {
 
 //Buscar um livro pelo ID
 const getByIdLivro = async function(id) {
+
+    //Guarda o ID de forma que possamos recuperar em outra funcao independente do evento
+    sessionStorage.setItem('idLivro', id)
+
     let URL = 'https://projeto-livraria-latx.onrender.com/v2/livraria/livro/' + id
 
         let response = await fetch(URL)
@@ -170,6 +212,8 @@ const getByIdLivro = async function(id) {
             document.getElementById('subtitle').value   = dados.books[0].subtitle
             document.getElementById('image').value      = dados.books[0].image
             document.getElementById('price').value      = dados.books[0].price
+
+            document.getElementById('salvar').innerText = 'Atualizar'
 }
 
 const resetForm = function() {
@@ -180,7 +224,11 @@ const resetForm = function() {
 }
 
 botaoSalvar.addEventListener('click', function() {
-    postLivro()
+    if(botaoSalvar.innerText == 'Salvar') {
+        postLivro()
+    }else{
+        putLivro()
+    }
 })
 
 window.addEventListener('load', function() {
